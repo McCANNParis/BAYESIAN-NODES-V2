@@ -257,7 +257,13 @@ class ComfyUIOptimizer:
         score = self.calculate_similarity(generated_image)
         
         # Save best image
-        if trial.number == 0 or score > trial.study.best_value:
+        try:
+            is_best = trial.number == 0 or score > trial.study.best_value
+        except (ValueError, AttributeError):
+            # No successful trials yet
+            is_best = True
+            
+        if is_best:
             output_path = f"outputs/best_trial_{trial.number}_score_{score:.4f}.png"
             os.makedirs("outputs", exist_ok=True)
             cv2.imwrite(output_path, generated_image)
