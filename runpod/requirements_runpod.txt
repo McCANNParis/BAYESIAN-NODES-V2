@@ -2,6 +2,9 @@
 # Designed for: runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04
 # PyTorch, torchvision, numpy, and Jupyter are pre-installed
 
+# CRITICAL: NumPy version constraint for PyTorch 2.2.0 compatibility
+numpy<2.0  # Must use NumPy 1.x with PyTorch 2.2.0
+
 # Core optimization framework
 optuna>=3.3.0
 requests>=2.31.0

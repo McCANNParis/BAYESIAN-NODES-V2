@@ -91,6 +91,22 @@ def check_environment():
     python_version = sys.version.split()[0]
     print(f"{Colors.BLUE}Python Version:{Colors.ENDC} {python_version}")
     
+    # Check NumPy version first (critical for PyTorch compatibility)
+    try:
+        import numpy as np
+        numpy_version = np.__version__
+        if numpy_version.startswith('2.'):
+            print(f"{Colors.RED}WARNING: NumPy {numpy_version} detected!{Colors.ENDC}")
+            print(f"{Colors.YELLOW}PyTorch 2.2.0 requires NumPy 1.x. Downgrading...{Colors.ENDC}")
+            subprocess.run([sys.executable, "-m", "pip", "install", "numpy<2", "--force-reinstall"], 
+                         capture_output=True)
+            print(f"{Colors.GREEN}✓ NumPy downgraded to 1.x{Colors.ENDC}")
+            # Reload numpy
+            import importlib
+            importlib.reload(np)
+    except ImportError:
+        pass
+    
     # Check CUDA availability
     try:
         import torch
