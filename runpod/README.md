@@ -53,7 +53,7 @@ python optimizer.py \
 ## Environment Variables
 
 ```bash
-export COMFYUI_PORT=8188  # If using non-default port
+export COMFYUI_PORT=3000  # RunPod default ComfyUI port
 export RUNPOD_POD_ID=your_pod_id  # Automatically set by RunPod
 ```
 
@@ -127,5 +127,5 @@ pip install -r requirements_runpod.txt
 
 ### Connection Timeout
 - Increase timeout in config
-- Check if ComfyUI is running: `curl http://localhost:8188/`
+- Check if ComfyUI is running: `curl http://localhost:3000/`
 - Verify COMFYUI_PORT environment variable

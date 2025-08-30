@@ -46,7 +46,7 @@ class ComfyUIOptimizer:
     def __init__(self, config_path: str = "config.yaml"):
         """Initialize optimizer with configuration"""
         self.config = self._load_config(config_path)
-        self.api_url = self.config.get('runpod', {}).get('api_url', 'http://localhost:8188')
+        self.api_url = self.config.get('runpod', {}).get('api_url', 'http://localhost:3000')
         self.workflow = None
         self.target_image = None
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -57,7 +57,7 @@ class ComfyUIOptimizer:
         self.runpod_mode = os.environ.get('RUNPOD_POD_ID') is not None
         if self.runpod_mode:
             logger.info(f"Running on RunPod Pod: {os.environ.get('RUNPOD_POD_ID')}")
-            self.api_url = f"http://localhost:{os.environ.get('COMFYUI_PORT', '8188')}"
+            self.api_url = f"http://localhost:{os.environ.get('COMFYUI_PORT', '3000')}"
         
     def _load_config(self, config_path: str) -> Dict:
         """Load configuration from YAML file"""

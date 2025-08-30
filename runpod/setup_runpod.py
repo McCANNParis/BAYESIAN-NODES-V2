@@ -264,14 +264,15 @@ def main():
     print(f"\n{Colors.BOLD}Checking ComfyUI connection...{Colors.ENDC}")
     try:
         import requests
-        response = requests.get("http://localhost:8188/", timeout=2)
+        response = requests.get("http://localhost:3000/", timeout=2)
         if response.status_code == 200:
-            print(f"{Colors.GREEN}✓ ComfyUI is running on port 8188{Colors.ENDC}")
+            print(f"{Colors.GREEN}✓ ComfyUI is running on port 3000{Colors.ENDC}")
         else:
             print(f"{Colors.YELLOW}⚠ ComfyUI responded but with status code {response.status_code}{Colors.ENDC}")
     except requests.exceptions.ConnectionError:
-        print(f"{Colors.YELLOW}⚠ ComfyUI not accessible on port 8188{Colors.ENDC}")
-        print(f"  Make sure ComfyUI is running with: {Colors.BLUE}python main.py --listen 0.0.0.0{Colors.ENDC}")
+        print(f"{Colors.YELLOW}⚠ ComfyUI not accessible on port 3000{Colors.ENDC}")
+        print(f"  Note: RunPod ComfyUI typically runs on port 3000{Colors.ENDC}")
+        print(f"  Check the web UI at: {Colors.BLUE}http://0.0.0.0:3000{Colors.ENDC}")
     except requests.exceptions.Timeout:
         print(f"{Colors.YELLOW}⚠ ComfyUI connection timed out{Colors.ENDC}")
     except Exception as e:

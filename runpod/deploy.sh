@@ -44,12 +44,13 @@ python3 setup_runpod.py
 # Check if ComfyUI is accessible
 echo ""
 echo "Checking ComfyUI connection..."
-comfyui_port=${COMFYUI_PORT:-8188}
+comfyui_port=${COMFYUI_PORT:-3000}
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:$comfyui_port/ | grep -q "200\|404"; then
     echo "✓ ComfyUI is accessible on port $comfyui_port"
 else
     echo "⚠️  ComfyUI not detected on port $comfyui_port"
-    echo "   Make sure ComfyUI is running before starting optimization"
+    echo "   RunPod ComfyUI typically runs on port 3000"
+    echo "   Check the web UI at: http://0.0.0.0:3000"
 fi
 
 echo ""

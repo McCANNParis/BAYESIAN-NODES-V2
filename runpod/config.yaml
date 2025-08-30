@@ -60,7 +60,7 @@ parameters:
 
 # RunPod specific settings
 runpod:
-  api_url: http://localhost:8188
+  api_url: http://localhost:3000
   max_memory_gb: 24
   gpu_memory_fraction: 0.95
   timeout: 300
