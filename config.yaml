@@ -1,0 +1,104 @@
+# ComfyUI Bayesian Optimization Configuration
+# This file defines the parameters to optimize and their ranges
+
+study_name: comfyui_optimization
+storage: sqlite:///optimization.db
+
+# Parameters to optimize
+# Format: node_id.parameter_name
+parameters:
+  # KSampler node (most common parameters to optimize)
+  "3.cfg":
+    type: float
+    min: 1.0
+    max: 20.0
+    step: 0.5
+    current: 7.0
+    description: "Classifier-Free Guidance scale"
+  
+  "3.steps":
+    type: int
+    min: 20
+    max: 100
+    step: 5
+    current: 30
+    description: "Number of sampling steps"
+  
+  "3.denoise":
+    type: float
+    min: 0.0
+    max: 1.0
+    step: 0.05
+    current: 1.0
+    description: "Denoising strength"
+  
+  # ControlNet parameters (if using ControlNet)
+  "10.strength":
+    type: float
+    min: 0.0
+    max: 2.0
+    step: 0.1
+    current: 1.0
+    description: "ControlNet strength"
+  
+  # LoRA parameters (if using LoRA)
+  "15.strength_model":
+    type: float
+    min: 0.0
+    max: 1.0
+    step: 0.1
+    current: 0.8
+    description: "LoRA model strength"
+  
+  "15.strength_clip":
+    type: float
+    min: 0.0
+    max: 1.0
+    step: 0.1
+    current: 0.8
+    description: "LoRA CLIP strength"
+
+# RunPod specific settings
+runpod:
+  api_url: http://localhost:8188
+  max_memory_gb: 24
+  gpu_memory_fraction: 0.95
+  timeout: 300
+  retry_attempts: 3
+  
+# Local macOS settings
+local:
+  api_url: http://127.0.0.1:8188
+  max_memory_mb: 8192
+  timeout: 120
+  retry_attempts: 2
+  
+# Optimization settings
+optimization:
+  # Similarity metrics weights
+  similarity_weights:
+    ssim: 0.5          # Structural similarity
+    histogram: 0.3     # Color distribution
+    edge: 0.2          # Edge/structure similarity
+  
+  # Optuna sampler settings
+  sampler:
+    type: TPESampler   # Tree-structured Parzen Estimator
+    seed: 42
+    n_startup_trials: 10
+    n_ei_candidates: 24
+  
+  # Pruning settings (stop bad trials early)
+  pruner:
+    enabled: true
+    type: MedianPruner
+    n_startup_trials: 5
+    n_warmup_steps: 10
+  
+# Output settings
+output:
+  save_all_images: false
+  save_best_only: true
+  image_format: png
+  create_animation: true
+  plot_results: true

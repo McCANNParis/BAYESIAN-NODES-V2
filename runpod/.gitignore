@@ -1,0 +1,30 @@
+# Output files
+outputs/
+*.png
+*.jpg
+*.jpeg
+
+# Database files
+*.db
+optimization.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+
+# Workflow and target files (user-specific)
+my_workflow.json
+target_*.png
+optimized_*.json
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+.DS_Store

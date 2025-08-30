@@ -1,0 +1,38 @@
+# Minimal requirements for RunPod optimizer
+# Designed for: runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04
+# PyTorch, torchvision, numpy, and Jupyter are pre-installed
+
+# Core optimization framework
+optuna>=3.3.0
+requests>=2.31.0
+
+# Image processing (opencv may need additional system deps)
+opencv-python>=4.8.0
+scikit-image>=0.21.0
+# Pillow usually pre-installed, but ensure version
+Pillow>=10.0.0
+
+# Configuration and utilities
+PyYAML>=6.0
+tqdm>=4.65.0
+joblib>=1.3.0
+
+# Visualization for optimization results
+plotly>=5.15.0
+kaleido>=0.2.1  # For exporting plots without browser
+
+# Database for study persistence
+sqlalchemy>=2.0.0
+
+# Optional: Advanced perceptual metrics (uncomment if needed)
+# lpips>=0.1.4  # Requires torch, adds ~100MB
+
+# Optional: Data analysis (uncomment if needed)
+# pandas>=2.0.0  # May be pre-installed in some containers
+
+# Optional: System monitoring (uncomment if needed)
+# psutil>=5.9.0  # For memory monitoring
+
+# Optional: Rich terminal output (uncomment for better UI)
+# rich>=13.5.0
+# click>=8.1.0

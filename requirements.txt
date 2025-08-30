@@ -1,0 +1,34 @@
+# Core dependencies
+optuna>=3.3.0
+requests>=2.31.0
+Pillow>=10.0.0
+numpy>=1.24.0
+opencv-python>=4.8.0
+scikit-image>=0.21.0
+PyYAML>=6.0
+tqdm>=4.65.0
+joblib>=1.3.0
+
+# Visualization
+plotly>=5.15.0
+kaleido>=0.2.1  # For exporting plots
+
+# Deep learning (optional but recommended for better similarity metrics)
+torch>=2.0.0  # Use torch==2.0.0 for specific version
+torchvision>=0.15.0
+
+# Optional: Advanced perceptual metrics
+lpips>=0.1.4  # Learned Perceptual Image Patch Similarity
+
+# Database for study persistence
+sqlalchemy>=2.0.0
+
+# For macOS specific features
+psutil>=5.9.0  # System monitoring
+
+# Data analysis and export
+pandas>=2.0.0  # For CSV export
+
+# Optional: For better progress bars and UI
+rich>=13.5.0  # Rich terminal output
+click>=8.1.0  # CLI improvements
