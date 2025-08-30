@@ -66,6 +66,7 @@ def get_required_packages() -> Dict[str, Dict[str, str]]:
         'joblib': {'min_version': '1.3.0', 'import_name': 'joblib'},
         'plotly': {'min_version': '5.15.0', 'import_name': 'plotly'},
         'sqlalchemy': {'min_version': '2.0.0', 'import_name': 'sqlalchemy'},
+        'GitPython': {'min_version': '3.1.0', 'import_name': 'git'},  # Required for ComfyUI-Manager
     }
     
     # Optional but recommended packages
@@ -209,6 +210,9 @@ plotly>=5.15.0
 # Database for study persistence
 sqlalchemy>=2.0.0
 
+# ComfyUI dependencies
+GitPython>=3.1.0  # Required for ComfyUI-Manager
+
 # Optional but recommended
 # lpips>=0.1.4  # For advanced perceptual metrics
 # pandas>=2.0.0  # For data export
@@ -257,8 +261,21 @@ def main():
     print(f"  {Colors.BLUE}python optimizer.py --workflow ../example_workflow.json --target ../target.png{Colors.ENDC}")
     
     # Check for ComfyUI
-    print(f"\n{Colors.BOLD}Note:{Colors.ENDC} Make sure ComfyUI is running on port 8188")
-    print(f"You can check with: {Colors.BLUE}curl http://localhost:8188/{Colors.ENDC}")
+    print(f"\n{Colors.BOLD}Checking ComfyUI connection...{Colors.ENDC}")
+    try:
+        import requests
+        response = requests.get("http://localhost:8188/", timeout=2)
+        if response.status_code == 200:
+            print(f"{Colors.GREEN}✓ ComfyUI is running on port 8188{Colors.ENDC}")
+        else:
+            print(f"{Colors.YELLOW}⚠ ComfyUI responded but with status code {response.status_code}{Colors.ENDC}")
+    except requests.exceptions.ConnectionError:
+        print(f"{Colors.YELLOW}⚠ ComfyUI not accessible on port 8188{Colors.ENDC}")
+        print(f"  Make sure ComfyUI is running with: {Colors.BLUE}python main.py --listen 0.0.0.0{Colors.ENDC}")
+    except requests.exceptions.Timeout:
+        print(f"{Colors.YELLOW}⚠ ComfyUI connection timed out{Colors.ENDC}")
+    except Exception as e:
+        print(f"{Colors.YELLOW}⚠ Could not check ComfyUI: {e}{Colors.ENDC}")
 
 if __name__ == "__main__":
     main()

@@ -24,6 +24,9 @@ kaleido>=0.2.1  # For exporting plots without browser
 # Database for study persistence
 sqlalchemy>=2.0.0
 
+# ComfyUI dependencies
+GitPython>=3.1.0  # Required for ComfyUI-Manager custom node
+
 # Optional: Advanced perceptual metrics (uncomment if needed)
 # lpips>=0.1.4  # Requires torch, adds ~100MB
 
