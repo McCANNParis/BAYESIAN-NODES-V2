@@ -49,7 +49,23 @@ class ComfyUIOptimizer:
         self.api_url = self.config.get('runpod', {}).get('api_url', 'http://localhost:3000')
         self.workflow = None
         self.target_image = None
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        
+        # Check CUDA compatibility
+        if torch.cuda.is_available():
+            try:
+                # Test if CUDA actually works with a simple operation
+                test_tensor = torch.tensor([1.0]).cuda()
+                _ = test_tensor * 2
+                self.device = torch.device('cuda')
+                logger.info("Using CUDA for computations")
+            except RuntimeError as e:
+                logger.warning(f"CUDA available but not compatible: {e}")
+                logger.info("Falling back to CPU for computations")
+                self.device = torch.device('cpu')
+        else:
+            self.device = torch.device('cpu')
+            logger.info("Using CPU for computations")
+            
         self.session = requests.Session()
         self.session.headers.update({'Content-Type': 'application/json'})
         
@@ -88,7 +104,14 @@ class ComfyUIOptimizer:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         tensor = torch.from_numpy(image).float() / 255.0
         tensor = tensor.permute(2, 0, 1).unsqueeze(0)
-        return tensor.to(self.device)
+        
+        # Safely move to device
+        try:
+            return tensor.to(self.device)
+        except RuntimeError as e:
+            logger.warning(f"Failed to move tensor to {self.device}: {e}")
+            self.device = torch.device('cpu')  # Update device for future operations
+            return tensor.to('cpu')
     
     def _wait_for_completion(self, prompt_id: str, timeout: int = 300) -> Dict:
         """Wait for ComfyUI to complete processing"""
