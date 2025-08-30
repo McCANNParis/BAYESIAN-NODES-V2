@@ -246,26 +246,32 @@ class ComfyUIOptimizer:
         
         return score
     
-    def optimize(self, n_trials: int = 50, n_jobs: int = 1) -> optuna.Study:
+    def optimize(self, n_trials: int = 50, n_jobs: int = 1, study_name: str = None) -> optuna.Study:
         """Run Bayesian optimization"""
         # Create or load study
-        study_name = self.config.get('study_name', 'comfyui_optimization')
+        if study_name is None:
+            study_name = self.config.get('study_name', 'comfyui_optimization')
         storage = self.config.get('storage', f'sqlite:///{study_name}.db')
         
         try:
+            # load_study doesn't take direction parameter
             study = optuna.load_study(
                 study_name=study_name,
-                storage=storage,
-                direction='maximize'
+                storage=storage
             )
             logger.info(f"Loaded existing study with {len(study.trials)} trials")
         except:
+            # Create new study with load_if_exists to handle existing studies
             study = optuna.create_study(
                 study_name=study_name,
                 storage=storage,
-                direction='maximize'
+                direction='maximize',
+                load_if_exists=True  # This prevents the DuplicatedStudyError
             )
-            logger.info("Created new study")
+            if len(study.trials) > 0:
+                logger.info(f"Loaded existing study with {len(study.trials)} trials")
+            else:
+                logger.info("Created new study")
         
         # Add progress bar callback
         pbar = tqdm(total=n_trials, initial=len(study.trials))
@@ -334,6 +340,8 @@ def main():
     parser.add_argument('--config', type=str, default='config.yaml', help='Path to config file')
     parser.add_argument('--trials', type=int, default=50, help='Number of optimization trials')
     parser.add_argument('--jobs', type=int, default=1, help='Number of parallel jobs')
+    parser.add_argument('--study-name', type=str, default=None, help='Optuna study name')
+    parser.add_argument('--resume', action='store_true', help='Resume existing study')
     
     args = parser.parse_args()
     
@@ -345,7 +353,11 @@ def main():
     optimizer.load_target_image(args.target)
     
     # Run optimization
-    study = optimizer.optimize(n_trials=args.trials, n_jobs=args.jobs)
+    study = optimizer.optimize(
+        n_trials=args.trials, 
+        n_jobs=args.jobs,
+        study_name=args.study_name
+    )
     
     print("\n" + "="*50)
     print("OPTIMIZATION COMPLETE")
